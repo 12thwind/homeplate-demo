@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Home Plate — A permanent record for every building</title>
+<meta name="description" content="Home Plate gives every building a durable, scannable record of its documents, systems, work history, finances and people — a property ledger that outlives any owner."/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=IBM+Plex+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f6f4ee;--paper-2:#efede5;--card:#fbfaf6;
+    --ink:#111110;--ink-2:#2a2a27;--ink-3:#6b6a64;--ink-4:#9a988f;
+    --rule:#1a1a18;--rule-soft:#dcd8cc;--rule-softer:#e8e4d8;
+    --accent:#b14a2a;--accent-2:#eddfd2;
+  }
+  *{box-sizing:border-box;}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;}
+  body{margin:0;background:var(--paper);color:var(--ink);
+    font-family:'IBM Plex Sans',system-ui,sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;}
+  .serif{font-family:'Instrument Serif',Georgia,serif;font-weight:400;letter-spacing:-.01em;}
+  .mono{font-family:'JetBrains Mono',ui-monospace,monospace;}
+  .eyebrow{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3);}
+  a{color:inherit;}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 32px;}
+  section{border-top:1px solid var(--rule-soft);}
+
+  /* top bar */
+  .top{display:flex;align-items:center;justify-content:space-between;padding:20px 32px;max-width:1160px;margin:0 auto;}
+  .brand{display:flex;align-items:center;gap:11px;}
+  .brand .mark{width:30px;height:30px;border:1.5px solid var(--ink);border-radius:5px;position:relative;flex:none;}
+  .brand .mark::before{content:"";position:absolute;inset:7px;border:1.5px solid var(--ink);border-bottom:none;border-right:none;}
+  .brand .wm{font-family:'Instrument Serif',serif;font-size:23px;line-height:1;}
+  .brand .sub{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--ink-3);margin-top:3px;}
+  .topnav{display:flex;align-items:center;gap:26px;}
+  .topnav a{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);text-decoration:none;}
+  .topnav a:hover{color:var(--accent);}
+  .btn{display:inline-flex;align-items:center;gap:8px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;text-transform:uppercase;
+    padding:10px 18px;border-radius:9px;border:1px solid var(--ink);background:var(--ink);color:var(--paper);text-decoration:none;cursor:pointer;transition:background .15s ease;}
+  .btn:hover{background:#000;}
+  .btn.ghost{background:transparent;color:var(--ink);}
+  .btn.ghost:hover{background:var(--paper-2);}
+
+  /* hero */
+  .hero{display:grid;grid-template-columns:1.5fr 1fr;gap:54px;align-items:center;padding:64px 0 80px;border-top:none;}
+  .hero h1{font-family:'Instrument Serif',serif;font-weight:400;font-size:74px;line-height:.98;letter-spacing:-.02em;margin:18px 0 22px;}
+  .hero h1 em{font-style:italic;color:var(--accent);}
+  .hero .lead{font-size:18px;line-height:1.6;color:var(--ink-2);max-width:33em;}
+  .hero .cta{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap;}
+  .hero .reassure{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;color:var(--ink-3);margin-top:20px;}
+
+  /* signature: property tag */
+  .tag{
+    border:1px solid var(--rule);border-radius:16px;padding:22px;position:relative;
+    background:repeating-linear-gradient(135deg,rgba(17,17,16,.025) 0 7px,transparent 7px 16px),var(--card);
+  }
+  .tag::before{content:"PROPERTY TAG";position:absolute;top:-8px;left:20px;background:var(--paper);padding:0 9px;
+    font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.22em;color:var(--ink-3);}
+  .tag .qr{width:128px;height:128px;background:#fbfaf6;border:1px solid var(--rule);border-radius:8px;padding:9px;margin:0 auto;}
+  .tag .qr svg{width:100%;height:100%;display:block;}
+  .tag .url{text-align:center;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.04em;color:var(--ink-2);margin-top:14px;}
+  .tag .note{text-align:center;font-size:12.5px;color:var(--ink-3);margin-top:6px;line-height:1.45;}
+  .tag .seal{display:flex;align-items:center;justify-content:center;gap:8px;margin-top:16px;padding-top:14px;border-top:1px solid var(--rule-softer);
+    font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);}
+  .tag .seal .dot{width:5px;height:5px;border-radius:50%;background:var(--accent);}
+
+  /* generic section header */
+  .shead{display:flex;align-items:baseline;justify-content:space-between;gap:24px;margin-bottom:30px;flex-wrap:wrap;}
+  .shead h2{font-family:'Instrument Serif',serif;font-weight:400;font-size:40px;line-height:1.02;letter-spacing:-.015em;margin:8px 0 0;max-width:18em;}
+  .shead .desc{max-width:30em;font-size:14px;color:var(--ink-3);line-height:1.6;}
+  .pad{padding:74px 0;}
+
+  /* ledger grid (what it holds) */
+  .ledger{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--rule);}
+  .ledger .row{padding:22px 20px 24px;border-right:1px solid var(--rule-softer);border-bottom:1px solid var(--rule-softer);}
+  .ledger .row:nth-child(4n){border-right:none;}
+  .ledger .num{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;color:var(--accent);}
+  .ledger .row h3{font-family:'Instrument Serif',serif;font-weight:400;font-size:21px;margin:8px 0 6px;letter-spacing:-.005em;}
+  .ledger .row p{font-size:13px;color:var(--ink-3);line-height:1.55;margin:0;}
+
+  /* steps */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+  .step .n{font-family:'Instrument Serif',serif;font-size:56px;line-height:1;color:var(--accent);}
+  .step h3{font-family:'Instrument Serif',serif;font-weight:400;font-size:25px;margin:6px 0 8px;letter-spacing:-.01em;}
+  .step p{font-size:14px;color:var(--ink-2);line-height:1.6;margin:0;}
+  .step .hr{height:1px;background:var(--rule-soft);margin:16px 0 0;}
+
+  /* readers */
+  .readers{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule-soft);}
+  .readers .r{padding:24px 22px;border-right:1px solid var(--rule-softer);}
+  .readers .r:last-child{border-right:none;}
+  .readers .r .k{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);}
+  .readers .r h3{font-family:'Instrument Serif',serif;font-weight:400;font-size:23px;margin:7px 0 7px;}
+  .readers .r p{font-size:13px;color:var(--ink-3);line-height:1.55;margin:0;}
+
+  /* building types */
+  .types{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+  .type{background:var(--card);border:1px solid var(--rule-soft);border-radius:13px;padding:24px;}
+  .type .k{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);}
+  .type h3{font-family:'Instrument Serif',serif;font-weight:400;font-size:27px;margin:8px 0 8px;letter-spacing:-.01em;}
+  .type p{font-size:13.5px;color:var(--ink-2);line-height:1.6;margin:0;}
+  .type .ex{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--ink-3);letter-spacing:.04em;margin-top:14px;padding-top:12px;border-top:1px solid var(--rule-softer);}
+
+  /* cta band */
+  .band{background:var(--ink);color:#e8e4d8;border-top:none;}
+  .band .inner{max-width:1160px;margin:0 auto;padding:72px 32px;display:flex;align-items:center;justify-content:space-between;gap:40px;flex-wrap:wrap;}
+  .band h2{font-family:'Instrument Serif',serif;font-weight:400;font-size:46px;line-height:1.02;letter-spacing:-.015em;margin:0;color:#fff;max-width:14em;}
+  .band p{font-size:14px;color:#a8a59b;margin:12px 0 0;font-family:'JetBrains Mono',monospace;letter-spacing:.04em;}
+  .band .btn{border-color:var(--paper);background:var(--paper);color:var(--ink);}
+  .band .btn:hover{background:#fff;}
+
+  /* footer */
+  footer .inner{max-width:1160px;margin:0 auto;padding:36px 32px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--ink-3);}
+  footer .inner a{color:var(--ink-2);text-decoration:none;}
+
+  @media (max-width:900px){
+    .hero{grid-template-columns:1fr;gap:38px;padding:40px 0 56px;}
+    .hero h1{font-size:54px;}
+    .topnav .navlink{display:none;}
+    .ledger{grid-template-columns:repeat(2,1fr);}
+    .ledger .row:nth-child(4n){border-right:1px solid var(--rule-softer);}
+    .ledger .row:nth-child(2n){border-right:none;}
+    .steps{grid-template-columns:1fr;}
+    .readers{grid-template-columns:repeat(2,1fr);}
+    .readers .r:nth-child(2n){border-right:none;}
+    .types{grid-template-columns:1fr;}
+    .band h2{font-size:34px;}
+  }
+  @media print{
+    .top,.band,.hero .cta,.topnav{display:none;}
+    body{background:#fff;} section{break-inside:avoid;}
+  }
+</style>
+</head>
+<body>
+
+  <div class="top">
+    <div class="brand">
+      <div class="mark"></div>
+      <div><div class="wm serif">Home Plate</div><div class="sub">Property Ledger</div></div>
+    </div>
+    <div class="topnav">
+      <a class="navlink" href="#holds">What it holds</a>
+      <a class="navlink" href="#how">How it works</a>
+      <a class="navlink" href="#types">Every building</a>
+      <a class="btn" href="mailto:hello@home-plate.io?subject=Home%20Plate%20early%20access">Request access</a>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <section class="hero">
+      <div>
+        <div class="eyebrow">Property Ledger · Est. 2026</div>
+        <h1 class="serif">A permanent record<br/>for every <em>building</em>.</h1>
+        <p class="lead">Every home, commercial property and piece of infrastructure accumulates a paper trail — deeds, permits, warranties, repairs, inspections, the people who did the work. It scatters across drawers, inboxes and memories, and it walks out the door with each owner. Home Plate keeps it in one durable, scannable record that stays with the building.</p>
+        <div class="cta">
+          <a class="btn" href="mailto:hello@home-plate.io?subject=Home%20Plate%20early%20access">Request early access</a>
+          <a class="btn ghost" href="#how">See how it works</a>
+        </div>
+        <div class="reassure">A Carfax for a home or building · one record, scanned at the door.</div>
+      </div>
+      <div class="tag">
+        <div class="qr"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 29 29" shape-rendering="crispEdges" aria-label="QR code linking to home-plate.io"><rect width="29" height="29" fill="#fbfaf6"/><path d="M2 2h1v1h-1zM3 2h1v1h-1zM4 2h1v1h-1zM5 2h1v1h-1zM6 2h1v1h-1zM7 2h1v1h-1zM8 2h1v1h-1zM11 2h1v1h-1zM13 2h1v1h-1zM14 2h1v1h-1zM15 2h1v1h-1zM16 2h1v1h-1zM20 2h1v1h-1zM21 2h1v1h-1zM22 2h1v1h-1zM23 2h1v1h-1zM24 2h1v1h-1zM25 2h1v1h-1zM26 2h1v1h-1zM2 3h1v1h-1zM8 3h1v1h-1zM10 3h1v1h-1zM11 3h1v1h-1zM12 3h1v1h-1zM14 3h1v1h-1zM16 3h1v1h-1zM20 3h1v1h-1zM26 3h1v1h-1zM2 4h1v1h-1zM4 4h1v1h-1zM5 4h1v1h-1zM6 4h1v1h-1zM8 4h1v1h-1zM10 4h1v1h-1zM13 4h1v1h-1zM14 4h1v1h-1zM16 4h1v1h-1zM17 4h1v1h-1zM18 4h1v1h-1zM20 4h1v1h-1zM22 4h1v1h-1zM23 4h1v1h-1zM24 4h1v1h-1zM26 4h1v1h-1zM2 5h1v1h-1zM4 5h1v1h-1zM5 5h1v1h-1zM6 5h1v1h-1zM8 5h1v1h-1zM10 5h1v1h-1zM12 5h1v1h-1zM14 5h1v1h-1zM15 5h1v1h-1zM16 5h1v1h-1zM20 5h1v1h-1zM22 5h1v1h-1zM23 5h1v1h-1zM24 5h1v1h-1zM26 5h1v1h-1zM2 6h1v1h-1zM4 6h1v1h-1zM5 6h1v1h-1zM6 6h1v1h-1zM8 6h1v1h-1zM14 6h1v1h-1zM15 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h1v1h-1zM23 6h1v1h-1zM24 6h1v1h-1zM26 6h1v1h-1zM2 7h1v1h-1zM8 7h1v1h-1zM11 7h1v1h-1zM12 7h1v1h-1zM15 7h1v1h-1zM16 7h1v1h-1zM18 7h1v1h-1zM20 7h1v1h-1zM26 7h1v1h-1zM2 8h1v1h-1zM3 8h1v1h-1zM4 8h1v1h-1zM5 8h1v1h-1zM6 8h1v1h-1zM7 8h1v1h-1zM8 8h1v1h-1zM10 8h1v1h-1zM12 8h1v1h-1zM14 8h1v1h-1zM16 8h1v1h-1zM18 8h1v1h-1zM20 8h1v1h-1zM21 8h1v1h-1zM22 8h1v1h-1zM23 8h1v1h-1zM24 8h1v1h-1zM25 8h1v1h-1zM26 8h1v1h-1zM10 9h1v1h-1zM13 9h1v1h-1zM2 10h1v1h-1zM8 10h1v1h-1zM10 10h1v1h-1zM12 10h1v1h-1zM15 10h1v1h-1zM16 10h1v1h-1zM17 10h1v1h-1zM19 10h1v1h-1zM20 10h1v1h-1zM23 10h1v1h-1zM24 10h1v1h-1zM25 10h1v1h-1zM2 11h1v1h-1zM3 11h1v1h-1zM4 11h1v1h-1zM5 11h1v1h-1zM6 11h1v1h-1zM10 11h1v1h-1zM12 11h1v1h-1zM13 11h1v1h-1zM15 11h1v1h-1zM16 11h1v1h-1zM17 11h1v1h-1zM21 11h1v1h-1zM22 11h1v1h-1zM23 11h1v1h-1zM24 11h1v1h-1zM25 11h1v1h-1zM2 12h1v1h-1zM4 12h1v1h-1zM5 12h1v1h-1zM7 12h1v1h-1zM8 12h1v1h-1zM10 12h1v1h-1zM12 12h1v1h-1zM14 12h1v1h-1zM17 12h1v1h-1zM19 12h1v1h-1zM23 12h1v1h-1zM25 12h1v1h-1zM26 12h1v1h-1zM4 13h1v1h-1zM5 13h1v1h-1zM12 13h1v1h-1zM13 13h1v1h-1zM14 13h1v1h-1zM16 13h1v1h-1zM18 13h1v1h-1zM19 13h1v1h-1zM22 13h1v1h-1zM23 13h1v1h-1zM26 13h1v1h-1zM2 14h1v1h-1zM3 14h1v1h-1zM5 14h1v1h-1zM8 14h1v1h-1zM9 14h1v1h-1zM11 14h1v1h-1zM12 14h1v1h-1zM14 14h1v1h-1zM18 14h1v1h-1zM20 14h1v1h-1zM21 14h1v1h-1zM26 14h1v1h-1zM2 15h1v1h-1zM3 15h1v1h-1zM5 15h1v1h-1zM7 15h1v1h-1zM9 15h1v1h-1zM10 15h1v1h-1zM15 15h1v1h-1zM17 15h1v1h-1zM18 15h1v1h-1zM21 15h1v1h-1zM25 15h1v1h-1zM2 16h1v1h-1zM4 16h1v1h-1zM6 16h1v1h-1zM8 16h1v1h-1zM10 16h1v1h-1zM12 16h1v1h-1zM13 16h1v1h-1zM14 16h1v1h-1zM15 16h1v1h-1zM16 16h1v1h-1zM17 16h1v1h-1zM19 16h1v1h-1zM21 16h1v1h-1zM22 16h1v1h-1zM23 16h1v1h-1zM25 16h1v1h-1zM26 16h1v1h-1zM2 17h1v1h-1zM4 17h1v1h-1zM9 17h1v1h-1zM10 17h1v1h-1zM11 17h1v1h-1zM13 17h1v1h-1zM18 17h1v1h-1zM19 17h1v1h-1zM20 17h1v1h-1zM21 17h1v1h-1zM23 17h1v1h-1zM24 17h1v1h-1zM26 17h1v1h-1zM2 18h1v1h-1zM4 18h1v1h-1zM5 18h1v1h-1zM8 18h1v1h-1zM9 18h1v1h-1zM10 18h1v1h-1zM11 18h1v1h-1zM12 18h1v1h-1zM13 18h1v1h-1zM17 18h1v1h-1zM18 18h1v1h-1zM19 18h1v1h-1zM20 18h1v1h-1zM21 18h1v1h-1zM22 18h1v1h-1zM24 18h1v1h-1zM10 19h1v1h-1zM11 19h1v1h-1zM12 19h1v1h-1zM14 19h1v1h-1zM15 19h1v1h-1zM17 19h1v1h-1zM18 19h1v1h-1zM22 19h1v1h-1zM2 20h1v1h-1zM3 20h1v1h-1zM4 20h1v1h-1zM5 20h1v1h-1zM6 20h1v1h-1zM7 20h1v1h-1zM8 20h1v1h-1zM12 20h1v1h-1zM13 20h1v1h-1zM18 20h1v1h-1zM20 20h1v1h-1zM22 20h1v1h-1zM26 20h1v1h-1zM2 21h1v1h-1zM8 21h1v1h-1zM11 21h1v1h-1zM12 21h1v1h-1zM14 21h1v1h-1zM15 21h1v1h-1zM17 21h1v1h-1zM18 21h1v1h-1zM22 21h1v1h-1zM25 21h1v1h-1zM26 21h1v1h-1zM2 22h1v1h-1zM4 22h1v1h-1zM5 22h1v1h-1zM6 22h1v1h-1zM8 22h1v1h-1zM12 22h1v1h-1zM14 22h1v1h-1zM16 22h1v1h-1zM17 22h1v1h-1zM18 22h1v1h-1zM19 22h1v1h-1zM20 22h1v1h-1zM21 22h1v1h-1zM22 22h1v1h-1zM24 22h1v1h-1zM25 22h1v1h-1zM26 22h1v1h-1zM2 23h1v1h-1zM4 23h1v1h-1zM5 23h1v1h-1zM6 23h1v1h-1zM8 23h1v1h-1zM11 23h1v1h-1zM12 23h1v1h-1zM16 23h1v1h-1zM17 23h1v1h-1zM18 23h1v1h-1zM19 23h1v1h-1zM20 23h1v1h-1zM25 23h1v1h-1zM26 23h1v1h-1zM2 24h1v1h-1zM4 24h1v1h-1zM5 24h1v1h-1zM6 24h1v1h-1zM8 24h1v1h-1zM12 24h1v1h-1zM13 24h1v1h-1zM14 24h1v1h-1zM18 24h1v1h-1zM23 24h1v1h-1zM24 24h1v1h-1zM26 24h1v1h-1zM2 25h1v1h-1zM8 25h1v1h-1zM12 25h1v1h-1zM13 25h1v1h-1zM16 25h1v1h-1zM18 25h1v1h-1zM19 25h1v1h-1zM20 25h1v1h-1zM21 25h1v1h-1zM22 25h1v1h-1zM26 25h1v1h-1zM2 26h1v1h-1zM3 26h1v1h-1zM4 26h1v1h-1zM5 26h1v1h-1zM6 26h1v1h-1zM7 26h1v1h-1zM8 26h1v1h-1zM10 26h1v1h-1zM11 26h1v1h-1zM15 26h1v1h-1zM16 26h1v1h-1zM17 26h1v1h-1zM18 26h1v1h-1zM20 26h1v1h-1zM23 26h1v1h-1zM26 26h1v1h-1z" fill="#111110"/></svg></div>
+        <div class="url">home-plate.io</div>
+        <div class="note">Every building gets a tag.<br/>Scan it to read the record.</div>
+        <div class="seal"><span class="dot"></span>Verified property record</div>
+      </div>
+    </section>
+  </div>
+
+  <section id="holds">
+    <div class="wrap pad">
+      <div class="shead">
+        <div>
+          <div class="eyebrow">§ 01 — The record</div>
+          <h2 class="serif">One record. Everything the building remembers.</h2>
+        </div>
+        <div class="desc">Documents, systems, money and people — captured once, kept current, and handed cleanly to the next owner, trade or inspector who needs it.</div>
+      </div>
+      <div class="ledger">
+        <div class="row"><div class="num">01</div><h3 class="serif">Documents &amp; deeds</h3><p>Title, leases, permits, insurance, warranties — the legal spine of the property, filed and findable.</p></div>
+        <div class="row"><div class="num">02</div><h3 class="serif">Systems &amp; equipment</h3><p>Every major system and appliance with model, serial, install date and warranty status.</p></div>
+        <div class="row"><div class="num">03</div><h3 class="serif">Maintenance &amp; work log</h3><p>What broke, who fixed it, what it cost — a service history that compounds over years.</p></div>
+        <div class="row"><div class="num">04</div><h3 class="serif">Finances &amp; basis</h3><p>Costs, capital improvements and tax basis tracked as they happen, not reconstructed later.</p></div>
+        <div class="row"><div class="num">05</div><h3 class="serif">Inspections &amp; compliance</h3><p>Permits, code, safety and regulatory records — current status, not a shoebox of PDFs.</p></div>
+        <div class="row"><div class="num">06</div><h3 class="serif">Contacts &amp; trades</h3><p>The vetted people who know the building — with ratings, last-job notes and what they charged.</p></div>
+        <div class="row"><div class="num">07</div><h3 class="serif">Timeline</h3><p>The whole story, in order — acquisition to today — exportable for partners, lenders and buyers.</p></div>
+        <div class="row"><div class="num">08</div><h3 class="serif">Photos &amp; plans</h3><p>As-builts, floor plans, single-lines and site photography, attached to the place they describe.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="how">
+    <div class="wrap pad">
+      <div class="shead">
+        <div>
+          <div class="eyebrow">§ 02 — How it works</div>
+          <h2 class="serif">Tag it. Scan it. Read the record.</h2>
+        </div>
+        <div class="desc">A physical tag at the door, mailbox or service panel becomes the front door to everything the building knows about itself.</div>
+      </div>
+      <div class="steps">
+        <div class="step">
+          <div class="n serif">01</div>
+          <h3 class="serif">Tag the building</h3>
+          <p>A durable, weatherproof tag carries a unique code and QR — placed at the entrance, panel or gate. One per property.</p>
+          <div class="hr"></div>
+        </div>
+        <div class="step">
+          <div class="n serif">02</div>
+          <h3 class="serif">Scan at the door</h3>
+          <p>Anyone with permission scans it on a phone — no app, no account hunt — and lands on the building's live record.</p>
+          <div class="hr"></div>
+        </div>
+        <div class="step">
+          <div class="n serif">03</div>
+          <h3 class="serif">Read the right view</h3>
+          <p>The record shows what each person needs: full history for the owner, the work order and shut-offs for a trade, the public file for an inspector.</p>
+          <div class="hr"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap pad">
+      <div class="shead">
+        <div>
+          <div class="eyebrow">§ 03 — Who reads it</div>
+          <h2 class="serif">One record, the right view for everyone.</h2>
+        </div>
+        <div class="desc">Access is scoped. The same tag opens different doors depending on who's holding the phone.</div>
+      </div>
+      <div class="readers">
+        <div class="r"><div class="k">Owners</div><h3 class="serif">The whole picture</h3><p>Documents, finances, systems, work and people — the full ledger for the building they hold.</p></div>
+        <div class="r"><div class="k">Trades</div><h3 class="serif">The job at hand</h3><p>The work order, shut-off locations, system history and a place to log the fix when it's done.</p></div>
+        <div class="r"><div class="k">Inspectors</div><h3 class="serif">The public file</h3><p>Permits, survey, systems and disclosures — verified records, ready to cross-check on site.</p></div>
+        <div class="r"><div class="k">Lenders &amp; buyers</div><h3 class="serif">The clean handoff</h3><p>A complete, exportable history that makes diligence fast and the transfer trustworthy.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="types">
+    <div class="wrap pad">
+      <div class="shead">
+        <div>
+          <div class="eyebrow">§ 04 — Every kind of building</div>
+          <h2 class="serif">From a house to a power plant.</h2>
+        </div>
+        <div class="desc">The same ledger adapts to what a property actually is — the record a duplex needs is not the record a substation needs.</div>
+      </div>
+      <div class="types">
+        <div class="type">
+          <div class="k">Residential</div>
+          <h3 class="serif">Homes</h3>
+          <p>Single-family and small multifamily — appliances, renovations, inventory and the running cost of ownership.</p>
+          <div class="ex">Deeds · systems · maintenance · home inventory</div>
+        </div>
+        <div class="type">
+          <div class="k">Commercial</div>
+          <h3 class="serif">Income property</h3>
+          <p>Mixed-use, retail, office and multifamily — leases, rent roll, capital projects and building systems.</p>
+          <div class="ex">Leases · NOI · capital · building systems</div>
+        </div>
+        <div class="type">
+          <div class="k">Infrastructure</div>
+          <h3 class="serif">Built assets</h3>
+          <p>Solar, storage, utilities and civil assets — equipment registers, compliance, O&amp;M and safety plans.</p>
+          <div class="ex">Equipment · compliance · O&amp;M · fire / safety</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="inner">
+      <div>
+        <h2 class="serif">Give every building a memory.</h2>
+        <p>Early access · 2026</p>
+      </div>
+      <a class="btn" href="mailto:hello@home-plate.io?subject=Home%20Plate%20early%20access">Request early access →</a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="inner">
+      <div class="brand" style="gap:9px;">
+        <div class="mark" style="width:24px;height:24px;"></div>
+        <div><div class="wm serif" style="font-size:18px;">Home Plate</div></div>
+      </div>
+      <div>A permanent record for every building.</div>
+      <div><a href="mailto:hello@home-plate.io">hello@home-plate.io</a> · home-plate.io · © 2026</div>
+    </div>
+  </footer>
+
+</body>
+</html>
